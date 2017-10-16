@@ -9,6 +9,8 @@ import javafx.stage.Stage;
 
 public class FXSlider extends Application {
 	
+	Slider vSlider;
+	
 	public static void main(String[] args) {
 		launch();
 	}
@@ -16,10 +18,10 @@ public class FXSlider extends Application {
 	public void start(Stage primaryStage) {
 	        
 	        SliderMaker sm = new SliderMaker();
-	        Slider s = sm.createSlider();
-	        
+	        vSlider = sm.createVSlider();
+		
 	        StackPane root = new StackPane();
-	        root.getChildren().add(s);
+	        root.getChildren().add(vSlider);
 	        primaryStage.setScene(new Scene(root, 300, 250));
 	        primaryStage.setTitle("Project Test");
 	        primaryStage.show();
