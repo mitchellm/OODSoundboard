@@ -7,7 +7,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class FXSlider extends Application {
+public class Soundboard extends Application {
 	
 	Slider vSlider;
 	
