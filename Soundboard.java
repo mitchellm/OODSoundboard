@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class Soundboard extends Application {
 	
-	Slider vSlider;
+	Slider vSlider, fSlider;
 	
 	public static void main(String[] args) {
 		launch();
@@ -19,9 +19,10 @@ public class Soundboard extends Application {
 	        
 	        SliderMaker sm = new SliderMaker();
 	        vSlider = sm.createVSlider();
+		fSlider = sm.createFSlider();
 		
 	        StackPane root = new StackPane();
-	        root.getChildren().add(vSlider);
+	        root.getChildren().addAll(vSlider, fSlider);
 	        primaryStage.setScene(new Scene(root, 300, 250));
 	        primaryStage.setTitle("Project Test");
 	        primaryStage.show();
