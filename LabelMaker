@@ -1,0 +1,13 @@
+import javafx.scene.control.Label;
+public class LabelMaker {
+	private L vl;
+	
+	public LabelMaker() {
+		vl = new VolumeLabel();
+	}
+	
+	public Label createVLabel() {
+		return vl.create();
+	}
+	
+}
