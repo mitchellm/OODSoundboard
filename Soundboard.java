@@ -23,7 +23,7 @@ public class Soundboard extends Application {
 		
 	        StackPane root = new StackPane();
 	        root.getChildren().addAll(vSlider, fSlider);
-	        primaryStage.setScene(new Scene(root, 300, 250));
+	        primaryStage.setScene(new Scene(root, 1300, 600));
 	        primaryStage.setTitle("Project Test");
 	        primaryStage.show();
 	 }
