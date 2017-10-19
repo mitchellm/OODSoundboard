@@ -30,7 +30,7 @@ public class Soundboard extends Application {
 		fSlider = sm.createFSlider();
 		fl = lm.createFLabel();
 		fl.textProperty().bind(
-			Bindings.format("%.2f", fSlider.valueProperty())
+			Bindings.format("%.0f", fSlider.valueProperty())
 		);
 		
 	        StackPane root = new StackPane();
