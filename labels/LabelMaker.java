@@ -1,3 +1,5 @@
+package labels;
+
 import javafx.scene.control.Label;
 public class LabelMaker {
 	private L vl;

@@ -1,3 +1,5 @@
+package sliders;
+
 import javafx.scene.control.Slider;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
