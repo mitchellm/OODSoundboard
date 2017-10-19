@@ -24,7 +24,7 @@ public class Soundboard extends Application {
 	        vSlider = sm.createVSlider();
 		vl = lm.createVLabel();
 	    	vl.textProperty().bind(
-	    		Bindings.format("%.2f", vSlider.valueProperty())
+	    		Bindings.format("%.0f", vSlider.valueProperty())
 	    	);
 		
 		fSlider = sm.createFSlider();
