@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 public class Soundboard extends Application {
 	
 	Slider vSlider, fSlider;
-	Label vl;
+	Label vl, fl;
 	
 	public static void main(String[] args) {
 		launch();
@@ -23,15 +23,18 @@ public class Soundboard extends Application {
 		
 	        vSlider = sm.createVSlider();
 		vl = lm.createVLabel();
-	    
 	    	vl.textProperty().bind(
 	    		Bindings.format("%.2f", vSlider.valueProperty())
 	    	);
 		
 		fSlider = sm.createFSlider();
+		fl = lm.createFLabel();
+		fl.textProperty().bind(
+			Bindings.format("%.2f", fSlider.valueProperty())
+		);
 		
 	        StackPane root = new StackPane();
-	        root.getChildren().addAll(vl, vSlider, fSlider);
+	        root.getChildren().addAll(vl, fl, vSlider, fSlider);
 	        primaryStage.setScene(new Scene(root, 1300, 600));
 	        primaryStage.setTitle("Project Test");
 		primaryStage.setResizable(false);
