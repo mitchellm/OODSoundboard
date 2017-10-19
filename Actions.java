@@ -1,6 +1,6 @@
 
 
-public interface SoundBoard {
+public interface Actions {
 	// soundboard actions
    void play();
 }
