@@ -1,8 +1,8 @@
 
-public class SoundBoardFactory {
+public class SFactory {
 	
 	 
-	   public SoundBoard getSoundboard(String soundboardType){
+	   public Actions getSoundboard(String soundboardType){
 	      if(soundboardType == null){
 	         return null;
 	      }		
