@@ -6,7 +6,10 @@ import javafx.stage.Stage;
 //import for Menu, MenuBar, etc..
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-
+/*add to nav bar
+	File-exit-open-save-saveas
+	edit-themes
+*/
 public class NavigationBarTest extends Application {
 	
 	
