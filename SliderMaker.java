@@ -5,6 +5,7 @@ public class SliderMaker {
 	
 	public SliderMaker() {
 		vSlider = new VolumeSlider();
+		fSlider = new FrequencySlider();
 	}
 	
 	public Slider createVSlider() {
