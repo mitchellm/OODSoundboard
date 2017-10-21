@@ -1,0 +1,5 @@
+This file is an example of how the volume can be changed easily when media is being played using FX media player.
+
+The java program sets the volume at 50%, then adds/removes 20% randomly until above 120% or below 0% then resets at 50%. This continues forever.
+
+The rest of the project included in the folder MediaPlayer
