@@ -7,23 +7,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="111.5" prefWidth="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="soundboardproto.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="214.00009155273438" prefWidth="397.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="soundboardproto.FXMLDocumentController">
   <children>
-    <GridPane layoutX="0.0" layoutY="0.0" prefHeight="69.0" prefWidth="320.0">
+    <GridPane layoutX="-5.0" layoutY="0.0" prefHeight="153.0" prefWidth="397.0">
       <children>
         <Button id="chooserbtn" fx:id="choose" mnemonicParsing="false" onAction="#browse" prefWidth="131.0" text="Browse File" GridPane.columnIndex="0" GridPane.rowIndex="0">
           <GridPane.margin>
             <Insets left="15.0" fx:id="x1" />
           </GridPane.margin>
         </Button>
-        <Button id="play" fx:id="stop" mnemonicParsing="false" onAction="#handleStop" prefWidth="64.00009999999747" text="STOP" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Button id="play" fx:id="stop" mnemonicParsing="false" onAction="#handleStop" prefWidth="51.0" text="STOP" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <GridPane.margin>
-            <Insets left="85.0" />
+            <Insets left="135.0" />
           </GridPane.margin>
         </Button>
-        <Button id="play" mnemonicParsing="false" onAction="#handlePlay" prefWidth="64.0" text="PLAY" GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <Button id="play" mnemonicParsing="false" onAction="#handlePause" prefWidth="60.0" text="PAUSE" GridPane.columnIndex="1" GridPane.rowIndex="0">
           <GridPane.margin>
-            <Insets left="10.0" />
+            <Insets left="65.0" />
+          </GridPane.margin>
+        </Button>
+        <Slider fx:id="speed_slider" blockIncrement="1.0" max="8.0" min="1.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+          <GridPane.margin>
+            <Insets left="5.0" right="5.0" />
+          </GridPane.margin>
+        </Slider>
+        <Label prefWidth="150.0" text="Playback rate =" GridPane.columnIndex="0" GridPane.rowIndex="1">
+          <GridPane.margin>
+            <Insets left="50.0" fx:id="x2" />
+          </GridPane.margin>
+        </Label>
+        <Slider id="slider" fx:id="volume_slider" blockIncrement="1.0" majorTickUnit="1.0" max="10.0" minorTickCount="1" prefWidth="189.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+          <GridPane.margin>
+            <Insets left="5.0" right="5.0" />
+          </GridPane.margin>
+        </Slider>
+        <Label prefWidth="150.0" text="Volume =" GridPane.columnIndex="0" GridPane.margin="$x2" GridPane.rowIndex="2" />
+        <Button id="play" mnemonicParsing="false" onAction="#handlePlay" prefWidth="50.0" text="PLAY" GridPane.columnIndex="1" GridPane.rowIndex="0">
+          <GridPane.margin>
+            <Insets left="5.0" />
           </GridPane.margin>
         </Button>
       </children>
@@ -33,8 +54,11 @@
       </columnConstraints>
       <rowConstraints>
         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Slider fx:id="slider" blockIncrement="1.0" layoutX="22.0" layoutY="69.0" majorTickUnit="1.0" max="10.0" minorTickCount="1" prefWidth="277.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+    <Label fx:id="fileSelected" layoutX="64.0" layoutY="191.0" prefWidth="234.0" text="None" />
+    <Label id="fileSelected" layoutX="30.0" layoutY="175.0" prefWidth="234.0" text="Currently playing:" />
   </children>
 </AnchorPane>

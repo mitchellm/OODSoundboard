@@ -40,9 +40,15 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Button stop;
+    
+    @FXML
+    private Label fileSelected;
 
     @FXML
-    private Slider slider;
+    private Slider volume_slider;
+
+    @FXML
+    private Slider speed_slider;
 
     @FXML
     private void browse(ActionEvent event) {
@@ -50,6 +56,7 @@ public class FXMLDocumentController implements Initializable {
         this.file = fileChooser.showOpenDialog(this.stage);
         Media sound = new Media(new File(this.file.getAbsolutePath()).toURI().toString());
         mp = new MediaPlayer(sound);
+        this.fileSelected.setText(this.file.getAbsolutePath());
     }
 
     @FXML
@@ -70,15 +77,31 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("NPE relating to play (MediaPlayer)");
         }
     }
+
+    @FXML
+    private void handlePause(ActionEvent event) {
+        try {
+            mp.pause();
+        } catch (NullPointerException e) {
+            System.out.println("NPE relating to play (MediaPlayer)");
+        }
+    }
     
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        slider.valueProperty().addListener((new ChangeListener<Number>() {
+        volume_slider.valueProperty().addListener((new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
                 mp.setVolume((double)new_val/10);
+            }
+        }));
+        
+        speed_slider.valueProperty().addListener((new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+                mp.setRate((double) new_val);
             }
         }));
     }

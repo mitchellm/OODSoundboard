@@ -24,6 +24,7 @@ public class SoundboardPrototype extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        stage.setResizable(false);
         stage.setTitle("Media Player Example");
     }
 
