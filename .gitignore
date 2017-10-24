@@ -2,16 +2,3 @@
 /SoundboardPrototype/dist/
 /SoundboardPrototype/nbproject/
 /SoundboardPrototype/test
-/MediaPlayer/dist/
-SoundboardPrototype/build/built-jar.properties
-SoundboardPrototype/build/classes/soundboardproto/FXMLDocument.fxml
-SoundboardPrototype/build/classes/soundboardproto/FXMLDocumentController$2.class
-*.class
-*.jnlp
-*.jar
-SoundboardPrototype/dist/run1113464865/SoundboardPrototype.html
-*.js
-*.png
-*.gif
-*.html
-*.xml
