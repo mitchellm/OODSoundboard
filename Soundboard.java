@@ -6,6 +6,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import labels.LabelMaker;
+import sliders.SliderMaker;
 
 public class Soundboard extends Application {
 	
