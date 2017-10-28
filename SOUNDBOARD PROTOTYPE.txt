@@ -1,2 +1,0 @@
-Implemented a filechooser along with a play/stop button with 
-a slider that sets the volume as it is observed being changed.
