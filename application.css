@@ -4,6 +4,10 @@
     -fx-pref-width: 20;
 }
 
+.slider .axis{
+	-fx-tick-label-fill: white;
+}
+
 .thumb {
 	-fx-pref-height: 30;
     -fx-pref-width: 30;

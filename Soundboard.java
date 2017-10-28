@@ -53,6 +53,10 @@ public class Soundboard extends Application {
 	}
 
 	public void start(Stage primaryStage) {
+		//Choose default label color
+		String strLblColor = "white";
+		String strLblColorCSS = "-fx-text-fill: "+strLblColor+";";
+		
 		//Initialize facade pattern makers
 		SliderMaker sldMaker = new SliderMaker();
 		LabelMaker lblMaker = new LabelMaker();
@@ -230,9 +234,11 @@ public class Soundboard extends Application {
 		lblVol = lblMaker.createVLabel();
 		lblVol.textProperty().bind(Bindings.format("%.0f", sldVol.valueProperty()));	
 		lblVol.setPadding(new Insets(0, 30, 0, 0));
+		lblVol.setStyle(strLblColorCSS);
 		
 		lblFreq = lblMaker.createFLabel();
 		lblFreq.textProperty().bind(Bindings.format("%.0f", sldFreq.valueProperty()));
+		lblFreq.setStyle(strLblColorCSS);
 
 		//Create containers for holding sliders and labels		
 		double vbWidth = 65;
