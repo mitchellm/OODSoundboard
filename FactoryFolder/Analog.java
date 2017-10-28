@@ -1,3 +1,4 @@
+package FactoryFolder;
 
 public class Analog implements Actions {
 
