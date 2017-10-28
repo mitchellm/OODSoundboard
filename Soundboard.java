@@ -1,6 +1,7 @@
 
 import java.io.File;
 
+import buttons.ButtonMaker;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -17,9 +18,14 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -27,6 +33,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import labels.LabelMaker;
+import menu_items.MenuItemsMaker;
 import sliders.SliderMaker;
 import javafx.scene.control.Button;
 
@@ -37,34 +44,36 @@ public class Soundboard extends Application {
 	Slider sldVol, sldFreq;
 	Label lblVol, lblFreq;
 	Button btnPlay, btnStop, btnPause;
+	MenuItem about, exit, open, save, saveAs, themes;
+	boolean isMuted = false;
+	ToggleButton btnMute;
 
 	public static void main(String[] args) {
 		launch();
 	}
 
 	public void start(Stage primaryStage) {
-		//Initialize slider and label makers
-		SliderMaker sliderMaker = new SliderMaker();
-		LabelMaker labelMaker = new LabelMaker();
+		//Initialize facade pattern makers
+		SliderMaker sldMaker = new SliderMaker();
+		LabelMaker lblMaker = new LabelMaker();
+		ButtonMaker btnMaker = new ButtonMaker();
+		MenuItemsMaker miMaker = new MenuItemsMaker();
 		
 		/* ---START NAVBAR--- */
-		//Initialize primary menu bar for navbar
+		//Create navigation bar and its contents
 		MenuBar navBar = new MenuBar();
-        
-        //syntax to create more items to put in navbar
         Menu navFile = new Menu("File");
         Menu navEdit = new Menu("Edit");
         Menu navOptions = new Menu("Options");
         Menu navHelp = new Menu("Help");
         
-        //syntax to add options to nav tabs
         //MenuItem what appears in drop down when clicking Nav
-        MenuItem about = new MenuItem("About");
-        MenuItem open = new MenuItem("Open");
-        MenuItem save = new MenuItem("Save");
-        MenuItem saveAs = new MenuItem("Save As");
-        MenuItem exit = new MenuItem("Exit");
-        MenuItem themes = new MenuItem("Themes");
+        about = miMaker.createAbout();
+        open = miMaker.createOpen();
+        save = miMaker.createSave();
+        saveAs = miMaker.createSaveAs();
+        exit = miMaker.createExit();
+        themes = miMaker.createThemes();
         
         //when button is clicked this happens
         about.setOnAction(new EventHandler<ActionEvent>() {
@@ -107,12 +116,16 @@ public class Soundboard extends Application {
         navBar.getMenus().addAll(navFile, navEdit, navOptions, navHelp);
         /* ---END NAVBAR--- */
 
-        //Create buttons
-        btnPlay = new Button("Play");
-        btnPause = new Button("Pause");
-		btnStop = new Button("Stop");
+        /* ---START BUTTONS--- */
+        btnPlay = btnMaker.createPlayButton();
+        btnPause = btnMaker.createPauseButton();
+		btnStop = btnMaker.createStopButton();
+		btnMute = new ToggleButton();
+		Image muteImage = new Image(getClass().getResourceAsStream("mute.png"));
+		btnMute.setGraphic(new ImageView(muteImage));
+		
         
-        /* ---BUTTON LISTENERS --- */
+        //Button listeners
         btnPlay.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override public void handle(ActionEvent e) {
 		        try {
@@ -141,20 +154,38 @@ public class Soundboard extends Application {
 		        }
 		    }
 		});
-		/* ---END BUTTON LISTENERS--- */
+		btnMute.selectedProperty().addListener(new ChangeListener<Boolean>() {			
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				try {
+		            if (newValue) {
+		            	mp.setMute(true);
+		            	isMuted = true;
+		            }
+		            if (!newValue) {
+		            	mp.setMute(false);
+		            	isMuted = false;
+		        	}
+		        } catch (NullPointerException e1) {
+		            System.out.println("NPE relating to mute (MediaPlayer)");
+		        }
+			}
+		});
+		        
+		
+		//Create HBox for holding buttons
+	    HBox buttonHB = new HBox();
+	    //buttonHB.setPadding(new Insets(10, 50, 50, 50));
+	    //buttonHB.setSpacing(40);
+	    buttonHB.setAlignment(Pos.CENTER);
+	    buttonHB.getChildren().addAll(btnPlay,btnPause,btnStop,btnMute);
+		/* ---END BUTTONS--- */
 		
         
-        //Create HBox for holding buttons
-	    HBox buttonHB = new HBox();
-	    buttonHB.setPadding(new Insets(10, 50, 50, 50));
-	    buttonHB.setSpacing(40);
-	    buttonHB.setAlignment(Pos.CENTER);
-	    buttonHB.getChildren().addAll(btnPlay,btnPause,btnStop);
-	    
 	    /* ---START SLIDERS--- */
 	    double sliderWidth = 450;
 	    double volInitial = 50;
-		sldVol = sliderMaker.createVSlider();
+		sldVol = sldMaker.createVSlider();
 		sldVol.setValue(volInitial);
 		ProgressBar prgVol = new ProgressBar(volInitial/sldVol.getMax());
 		prgVol.setMinWidth(sliderWidth);
@@ -173,11 +204,11 @@ public class Soundboard extends Application {
             	try {
             		mp.setVolume((double)new_val/100.0);
 	            } catch (NullPointerException e1) {
-		            System.out.println("NPE relating to play (MediaPlayer)");
+		            System.out.println("NPE relating to volume slider (MediaPlayer)");
 		        }
             }
         }));
-		sldFreq = sliderMaker.createFSlider();
+		sldFreq = sldMaker.createFSlider();
 		ProgressBar prgFreq = new ProgressBar(0);
 		prgFreq.setMinWidth(sliderWidth);
 		prgFreq.setMaxWidth(sliderWidth);
@@ -196,11 +227,11 @@ public class Soundboard extends Application {
         }));
 		
 		//Create labels
-		lblVol = labelMaker.createVLabel();
+		lblVol = lblMaker.createVLabel();
 		lblVol.textProperty().bind(Bindings.format("%.0f", sldVol.valueProperty()));	
 		lblVol.setPadding(new Insets(0, 30, 0, 0));
 		
-		lblFreq = labelMaker.createFLabel();
+		lblFreq = lblMaker.createFLabel();
 		lblFreq.textProperty().bind(Bindings.format("%.0f", sldFreq.valueProperty()));
 
 		//Create containers for holding sliders and labels		
@@ -233,12 +264,13 @@ public class Soundboard extends Application {
 		root.setTop(navBar);
 		root.setCenter(sliderHB);
 		root.setBottom(buttonHB);
+		root.setStyle("-fx-background-color: transparent;");
 		
 		//Build stage
-		Scene primaryScene = new Scene(root, 1000, 700);
+		Scene primaryScene = new Scene(root, 1000, 700, Color.web("#2c2f33"));
 		primaryScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setScene(primaryScene);
-		primaryStage.setTitle("Project Test");
+		primaryStage.setTitle("Soundboard");
 		primaryStage.setResizable(false);
 		primaryStage.show();
 		
