@@ -1,5 +1,6 @@
 
 import java.io.File;
+import java.util.Optional;
 
 import buttons.ButtonMaker;
 import javafx.application.Application;
@@ -20,6 +21,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -31,11 +34,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import labels.LabelMaker;
 import menu_items.MenuItemsMaker;
 import sliders.SliderMaker;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 
 public class Soundboard extends Application {
 
@@ -44,7 +49,8 @@ public class Soundboard extends Application {
 	Slider sldVol, sldFreq;
 	Label lblVol, lblFreq;
 	Button btnPlay, btnStop, btnPause;
-	MenuItem about, exit, open, save, saveAs, themes;
+	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs, mniThemes;
+	ProgressBar prgVol, prgFreq;
 	boolean isMuted = false;
 	ToggleButton btnMute;
 
@@ -72,48 +78,60 @@ public class Soundboard extends Application {
         Menu navHelp = new Menu("Help");
         
         //MenuItem what appears in drop down when clicking Nav
-        about = miMaker.createAbout();
-        open = miMaker.createOpen();
-        save = miMaker.createSave();
-        saveAs = miMaker.createSaveAs();
-        exit = miMaker.createExit();
-        themes = miMaker.createThemes();
+        mniAbout = miMaker.createAbout();
+        mniOpen = miMaker.createOpen();
+        mniSave = miMaker.createSave();
+        mniSaveAs = miMaker.createSaveAs();
+        mniExit = miMaker.createExit();
+        mniThemes = miMaker.createThemes();
         
         //when button is clicked this happens
-        about.setOnAction(new EventHandler<ActionEvent>() {
+        mniAbout.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	aboutInfo();
             }
         });
-        open.setOnAction(new EventHandler<ActionEvent>() {
+        mniOpen.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	mp = new MediaPlayer(openClick(mp, primaryStage));
+            	try {
+            		mp = new MediaPlayer(openClick(mp, primaryStage));
+	            	btnPlay.setDisable(false);
+	        		btnPause.setDisable(false);
+	        		btnStop.setDisable(false);
+	        		btnMute.setDisable(false);
+	        		sldVol.setDisable(false);
+	        		sldFreq.setDisable(false);
+	        		prgVol.setDisable(false);
+	        		prgFreq.setDisable(false);
+            	} catch(NullPointerException e) {
+            		System.out.println("No file selected.");
+            	}
             }
         });
-        save.setOnAction(new EventHandler<ActionEvent>() {
+        mniSave.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	saveClick();
             }
         });
-        saveAs.setOnAction(new EventHandler<ActionEvent>() {
+        mniSaveAs.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	saveAsClick();
             }
         });
-        exit.setOnAction(new EventHandler<ActionEvent>() {
+        mniExit.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	exitClick();
             }
         });
-        themes.setOnAction(new EventHandler<ActionEvent>() {
+        mniThemes.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	themesClick();
             }
         });
         //adds the drop down option to the help tab(navHelp)
-        navHelp.getItems().addAll(about);
-        navFile.getItems().addAll(open, save, saveAs, exit);
-        navEdit.getItems().addAll(themes);
+        navHelp.getItems().addAll(mniAbout);
+        navFile.getItems().addAll(mniOpen, mniSave, mniSaveAs, mniExit);
+        navEdit.getItems().addAll(mniThemes);
         navOptions.getItems().addAll();
         
         //add nav tabs to navbar
@@ -127,6 +145,12 @@ public class Soundboard extends Application {
 		btnMute = new ToggleButton();
 		Image muteImage = new Image(getClass().getResourceAsStream("mute.png"));
 		btnMute.setGraphic(new ImageView(muteImage));
+		
+		//Disable buttons before file is loaded
+		btnPlay.setDisable(true);
+		btnPause.setDisable(true);
+		btnStop.setDisable(true);
+		btnMute.setDisable(true);
 		
         
         //Button listeners
@@ -191,7 +215,7 @@ public class Soundboard extends Application {
 	    double volInitial = 50;
 		sldVol = sldMaker.createVSlider();
 		sldVol.setValue(volInitial);
-		ProgressBar prgVol = new ProgressBar(volInitial/sldVol.getMax());
+		prgVol = new ProgressBar(volInitial/sldVol.getMax());
 		prgVol.setMinWidth(sliderWidth);
 		prgVol.setMaxWidth(sliderWidth);
 		prgVol.getTransforms().addAll(new Rotate(-90, 0, 0));
@@ -213,7 +237,7 @@ public class Soundboard extends Application {
             }
         }));
 		sldFreq = sldMaker.createFSlider();
-		ProgressBar prgFreq = new ProgressBar(0);
+		prgFreq = new ProgressBar(0);
 		prgFreq.setMinWidth(sliderWidth);
 		prgFreq.setMaxWidth(sliderWidth);
 		prgFreq.getTransforms().addAll(new Rotate(-90, 0, 0));
@@ -229,6 +253,12 @@ public class Soundboard extends Application {
             	prgFreq.setProgress(new_val.doubleValue()/19980);
             }
         }));
+		
+		//Disable sliders before file is loaded
+		sldVol.setDisable(true);
+		prgVol.setDisable(true);
+		sldFreq.setDisable(true);
+		prgFreq.setDisable(true);
 		
 		//Create labels
 		lblVol = lblMaker.createVLabel();
@@ -272,6 +302,7 @@ public class Soundboard extends Application {
 		root.setBottom(buttonHB);
 		root.setStyle("-fx-background-color: transparent;");
 		
+		
 		//Build stage
 		Scene primaryScene = new Scene(root, 1000, 700, Color.web("#2c2f33"));
 		primaryScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -288,6 +319,8 @@ public class Soundboard extends Application {
 	
 	private Media openClick(MediaPlayer mp, Stage s) {
 		FileChooser fileChooser = new FileChooser();
+		ExtensionFilter fileFilter = new ExtensionFilter("Audio Files", "*.mp3", "*.m4a", "*.wav");
+		fileChooser.getExtensionFilters().add(fileFilter);
         fileSelected = fileChooser.showOpenDialog(s);
         Media sound = new Media(new File(fileSelected.getAbsolutePath()).toURI().toString());
         return sound;
@@ -302,6 +335,11 @@ public class Soundboard extends Application {
 	}
 	
 	private void exitClick() {
+		Alert confirm = new Alert(AlertType.CONFIRMATION);
+		confirm.setTitle("Confirm Exit");
+		confirm.setHeaderText("Are you sure you want to close the program?");
+		Optional<ButtonType> result = confirm.showAndWait();
+		if(result.get() == ButtonType.OK) System.exit(0);
 		
 	}
 	
