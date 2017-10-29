@@ -50,7 +50,7 @@ public class Soundboard extends Application {
 	Slider sldVol, sldFreq;
 	Label lblVol, lblFreq;
 	Button btnPlay, btnStop, btnPause;
-	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs, mniThemes;
+	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs, mniTheme;
 	ProgressBar prgVol, prgFreq;
 	boolean isMuted = false;
 	ToggleButton btnMute;
@@ -78,6 +78,7 @@ public class Soundboard extends Application {
         Menu navEdit = new Menu("Edit");
         Menu navOptions = new Menu("Options");
         Menu navHelp = new Menu("Help");
+        Menu navThemes = new Menu("Themes");
         
         //MenuItem what appears in drop down when clicking Nav
         mniAbout = miMaker.createAbout();
@@ -85,7 +86,7 @@ public class Soundboard extends Application {
         mniSave = miMaker.createSave();
         mniSaveAs = miMaker.createSaveAs();
         mniExit = miMaker.createExit();
-        mniThemes = miMaker.createThemes();
+        mniTheme = miMaker.createThemes();
         
         //when button is clicked this happens
         mniAbout.setOnAction(new EventHandler<ActionEvent>() {
@@ -125,7 +126,7 @@ public class Soundboard extends Application {
             	exitClick();
             }
         });
-        mniThemes.setOnAction(new EventHandler<ActionEvent>() {
+        mniTheme.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	themesClick(primaryScene);
             }
@@ -133,7 +134,8 @@ public class Soundboard extends Application {
         //adds the drop down option to the help tab(navHelp)
         navHelp.getItems().addAll(mniAbout);
         navFile.getItems().addAll(mniOpen, mniSave, mniSaveAs, mniExit);
-        navEdit.getItems().addAll(mniThemes);
+        navEdit.getItems().addAll(navThemes);
+        navThemes.getItems().addAll(mniTheme);
         navOptions.getItems().addAll();
         
         //add nav tabs to navbar

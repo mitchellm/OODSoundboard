@@ -15,7 +15,7 @@ public class MenuItemsMaker {
 		open = new Open();
 		saveAs = new SaveAs();
 		exit = new Exit();
-		themes = new Themes();
+		themes = new Theme();
 		about = new About();
 	}
 	
