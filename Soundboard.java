@@ -134,38 +134,22 @@ public class Soundboard extends Application {
         });
         cmiThemeDef.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	themeDefClick(primaryScene);
-            	cmiThemeDef.selectedProperty().set(true);
-            	cmiTheme1.selectedProperty().set(false);
-            	cmiTheme2.selectedProperty().set(false);
-            	cmiTheme3.selectedProperty().set(false);
+            	themeDefClick();
             }
         });
         cmiTheme1.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	theme1Click(primaryScene);
-            	cmiThemeDef.selectedProperty().set(false);
-            	cmiTheme1.selectedProperty().set(true);
-            	cmiTheme2.selectedProperty().set(false);
-            	cmiTheme3.selectedProperty().set(false);
+            	theme1Click();
             }
         });
         cmiTheme2.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	theme2Click(primaryScene);
-            	cmiThemeDef.selectedProperty().set(false);
-            	cmiTheme1.selectedProperty().set(false);
-            	cmiTheme2.selectedProperty().set(true);
-            	cmiTheme3.selectedProperty().set(false);
+            	theme2Click();
             }
         });
         cmiTheme3.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	theme3Click(primaryScene);
-            	cmiThemeDef.selectedProperty().set(false);
-            	cmiTheme1.selectedProperty().set(false);
-            	cmiTheme2.selectedProperty().set(false);
-            	cmiTheme3.selectedProperty().set(true);
+            	theme3Click();
             }
         });
         //adds the drop down option to the help tab(navHelp)
@@ -384,20 +368,36 @@ public class Soundboard extends Application {
 		
 	}
 	
-	private void themeDefClick(Scene s) {
-		s.setFill(Paint.valueOf("#2c2f33"));
+	private void themeDefClick() {
+		primaryScene.setFill(Paint.valueOf("#2c2f33"));
+		cmiThemeDef.selectedProperty().set(true);
+    	cmiTheme1.selectedProperty().set(false);
+    	cmiTheme2.selectedProperty().set(false);
+    	cmiTheme3.selectedProperty().set(false);
 	}
 	
-	private void theme1Click(Scene s) {
-		s.setFill(Paint.valueOf("red"));
+	private void theme1Click() {
+		primaryScene.setFill(Paint.valueOf("red"));
+		cmiThemeDef.selectedProperty().set(false);
+    	cmiTheme1.selectedProperty().set(true);
+    	cmiTheme2.selectedProperty().set(false);
+    	cmiTheme3.selectedProperty().set(false);
 	}
 	
-	private void theme2Click(Scene s) {
-		s.setFill(Paint.valueOf("red"));
+	private void theme2Click() {
+		primaryScene.setFill(Paint.valueOf("red"));
+		cmiThemeDef.selectedProperty().set(false);
+    	cmiTheme1.selectedProperty().set(false);
+    	cmiTheme2.selectedProperty().set(true);
+    	cmiTheme3.selectedProperty().set(false);
 	}
 	
-	private void theme3Click(Scene s) {
-		s.setFill(Paint.valueOf("red"));
+	private void theme3Click() {
+		primaryScene.setFill(Paint.valueOf("red"));
+		cmiThemeDef.selectedProperty().set(false);
+    	cmiTheme1.selectedProperty().set(false);
+    	cmiTheme2.selectedProperty().set(false);
+    	cmiTheme3.selectedProperty().set(true);
 	}
 	
 }
