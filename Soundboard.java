@@ -385,7 +385,7 @@ public class Soundboard extends Application {
 	}
 	
 	private void theme2Click() {
-		primaryScene.setFill(Paint.valueOf("red"));
+		primaryScene.setFill(Paint.valueOf("blue"));
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(false);
     	cmiTheme2.selectedProperty().set(true);
@@ -393,7 +393,7 @@ public class Soundboard extends Application {
 	}
 	
 	private void theme3Click() {
-		primaryScene.setFill(Paint.valueOf("red"));
+		primaryScene.setFill(Paint.valueOf("green"));
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(false);
     	cmiTheme2.selectedProperty().set(false);
