@@ -29,6 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.transform.Rotate;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -53,6 +54,7 @@ public class Soundboard extends Application {
 	ProgressBar prgVol, prgFreq;
 	boolean isMuted = false;
 	ToggleButton btnMute;
+	Scene primaryScene;
 
 	public static void main(String[] args) {
 		launch();
@@ -125,7 +127,7 @@ public class Soundboard extends Application {
         });
         mniThemes.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	themesClick();
+            	themesClick(primaryScene);
             }
         });
         //adds the drop down option to the help tab(navHelp)
@@ -304,7 +306,7 @@ public class Soundboard extends Application {
 		
 		
 		//Build stage
-		Scene primaryScene = new Scene(root, 1000, 700, Color.web("#2c2f33"));
+		primaryScene = new Scene(root, 1000, 700, Color.web("#2c2f33"));
 		primaryScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		primaryStage.setScene(primaryScene);
 		primaryStage.setTitle("Soundboard");
@@ -343,8 +345,8 @@ public class Soundboard extends Application {
 		
 	}
 	
-	private void themesClick() {
-		
+	private void themesClick(Scene s) {
+		s.setFill(Paint.valueOf("red"));
 	}
 	
 }
