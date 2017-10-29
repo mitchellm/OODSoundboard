@@ -42,6 +42,7 @@ import menu_items.MenuItemsMaker;
 import sliders.SliderMaker;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckMenuItem;
 
 public class Soundboard extends Application {
 
@@ -50,7 +51,8 @@ public class Soundboard extends Application {
 	Slider sldVol, sldFreq;
 	Label lblVol, lblFreq;
 	Button btnPlay, btnStop, btnPause;
-	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs, mniTheme;
+	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs;
+	CheckMenuItem cmiThemeDef, cmiTheme1, cmiTheme2, cmiTheme3;
 	ProgressBar prgVol, prgFreq;
 	boolean isMuted = false;
 	ToggleButton btnMute;
@@ -86,7 +88,11 @@ public class Soundboard extends Application {
         mniSave = miMaker.createSave();
         mniSaveAs = miMaker.createSaveAs();
         mniExit = miMaker.createExit();
-        mniTheme = miMaker.createThemes();
+        cmiThemeDef = new CheckMenuItem("Default");
+        cmiThemeDef.selectedProperty().set(true);
+        cmiTheme1 = new CheckMenuItem("Theme 1");
+        cmiTheme2 = new CheckMenuItem("Theme 2");
+        cmiTheme3 = new CheckMenuItem("Theme 3");
         
         //when button is clicked this happens
         mniAbout.setOnAction(new EventHandler<ActionEvent>() {
@@ -126,16 +132,47 @@ public class Soundboard extends Application {
             	exitClick();
             }
         });
-        mniTheme.setOnAction(new EventHandler<ActionEvent>() {
+        cmiThemeDef.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	themesClick(primaryScene);
+            	themeDefClick(primaryScene);
+            	cmiThemeDef.selectedProperty().set(true);
+            	cmiTheme1.selectedProperty().set(false);
+            	cmiTheme2.selectedProperty().set(false);
+            	cmiTheme3.selectedProperty().set(false);
+            }
+        });
+        cmiTheme1.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	theme1Click(primaryScene);
+            	cmiThemeDef.selectedProperty().set(false);
+            	cmiTheme1.selectedProperty().set(true);
+            	cmiTheme2.selectedProperty().set(false);
+            	cmiTheme3.selectedProperty().set(false);
+            }
+        });
+        cmiTheme2.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	theme2Click(primaryScene);
+            	cmiThemeDef.selectedProperty().set(false);
+            	cmiTheme1.selectedProperty().set(false);
+            	cmiTheme2.selectedProperty().set(true);
+            	cmiTheme3.selectedProperty().set(false);
+            }
+        });
+        cmiTheme3.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	theme3Click(primaryScene);
+            	cmiThemeDef.selectedProperty().set(false);
+            	cmiTheme1.selectedProperty().set(false);
+            	cmiTheme2.selectedProperty().set(false);
+            	cmiTheme3.selectedProperty().set(true);
             }
         });
         //adds the drop down option to the help tab(navHelp)
         navHelp.getItems().addAll(mniAbout);
         navFile.getItems().addAll(mniOpen, mniSave, mniSaveAs, mniExit);
         navEdit.getItems().addAll(navThemes);
-        navThemes.getItems().addAll(mniTheme);
+        navThemes.getItems().addAll(cmiThemeDef, cmiTheme1, cmiTheme2, cmiTheme3);
         navOptions.getItems().addAll();
         
         //add nav tabs to navbar
@@ -347,7 +384,19 @@ public class Soundboard extends Application {
 		
 	}
 	
-	private void themesClick(Scene s) {
+	private void themeDefClick(Scene s) {
+		s.setFill(Paint.valueOf("#2c2f33"));
+	}
+	
+	private void theme1Click(Scene s) {
+		s.setFill(Paint.valueOf("red"));
+	}
+	
+	private void theme2Click(Scene s) {
+		s.setFill(Paint.valueOf("red"));
+	}
+	
+	private void theme3Click(Scene s) {
 		s.setFill(Paint.valueOf("red"));
 	}
 	
