@@ -1,0 +1,25 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.slider .track {
+    -fx-background-color:null;  /* Hide the track */
+    -fx-pref-width: 20;
+}
+
+.slider .axis{
+	-fx-tick-label-fill: white;
+}
+
+.thumb {
+	-fx-pref-height: 30;
+    -fx-pref-width: 30;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: linear-gradient(
+        from 0px .75em to .75em 0px,
+        repeat,
+        -fx-accent 0%,
+        -fx-accent 49%,
+        derive(-fx-accent, 30%) 50%,
+        derive(-fx-accent, 30%) 99%
+    );
+}
