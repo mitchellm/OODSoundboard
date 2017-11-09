@@ -5,7 +5,4 @@
 bin/
 src/bin/
 .classpath
-.project
 *.class
-src/.classpath
-src/.project
