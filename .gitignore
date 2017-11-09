@@ -2,3 +2,7 @@
 /SoundboardPrototype/dist/
 /SoundboardPrototype/nbproject/
 /SoundboardPrototype/test
+/bin/
+/src/bin/
+.classpath
+.project
