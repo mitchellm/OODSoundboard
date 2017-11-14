@@ -5,7 +5,7 @@ import javafx.scene.control.Slider;
 import java.util.Observable;
 
 import javafx.geometry.Orientation;
-public class FrequencySlider extends Observable implements S  {
+public class FrequencySlider implements S  {
 	
 	public Slider create() {
 		Slider slider = new Slider(20, 20000, 100);
