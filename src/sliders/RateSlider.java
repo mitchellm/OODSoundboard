@@ -1,17 +1,16 @@
 package sliders;
 
 import javafx.scene.control.Slider;
-
-import java.util.Observable;
-
 import javafx.geometry.Orientation;
-public class FrequencySlider extends Observable implements S  {
+public class RateSlider implements S {
 	
 	public Slider create() {
-		Slider slider = new Slider(20, 20000, 100);
+		Slider slider = new Slider(0.1, 8, 1);
 		slider.setOrientation(Orientation.VERTICAL);
 		slider.setMinHeight(450);
 		slider.setMaxHeight(450);
+		slider.setShowTickMarks(true);
+		slider.setShowTickLabels(true);
 		return slider;
 	}
 	

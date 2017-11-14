@@ -5,6 +5,7 @@ import java.util.Optional;
 import buttons.ButtonMaker;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -48,12 +49,14 @@ public class Soundboard extends Application {
 
 	private File fileSelected;
 	private MediaPlayer mp;
-	Slider sldVol, sldFreq;
-	Label lblVol, lblFreq;
+	
+	Slider sldVol, sldFreq, sldRate;
+	Label lblVol, lblFreq, lblRate;
+	ProgressBar prgVol, prgFreq, prgRate;
+	
 	Button btnPlay, btnStop, btnPause;
 	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs;
 	CheckMenuItem cmiThemeDef, cmiTheme1, cmiTheme2, cmiTheme3;
-	ProgressBar prgVol, prgFreq;
 	boolean isMuted = false;
 	ToggleButton btnMute;
 	Scene primaryScene;
@@ -108,10 +111,15 @@ public class Soundboard extends Application {
 	        		btnPause.setDisable(false);
 	        		btnStop.setDisable(false);
 	        		btnMute.setDisable(false);
+	        		
 	        		sldVol.setDisable(false);
-	        		sldFreq.setDisable(false);
 	        		prgVol.setDisable(false);
+
 	        		prgFreq.setDisable(false);
+	        		sldFreq.setDisable(false);
+	        		
+	        		prgRate.setDisable(false);
+	        		sldRate.setDisable(false);
             	} catch(NullPointerException e) {
             		System.out.println("No file selected.");
             	}
@@ -237,6 +245,8 @@ public class Soundboard extends Application {
         
 	    /* ---START SLIDERS--- */
 	    double sliderWidth = 450;
+
+	    //VOLUME
 	    double volInitial = 50;
 		sldVol = sldMaker.createVSlider();
 		sldVol.setValue(volInitial);
@@ -250,17 +260,9 @@ public class Soundboard extends Application {
 		grpVol.getChildren().add(prgVol);
 		StackPane spVol = new StackPane();
 		spVol.getChildren().addAll(grpVol, sldVol);
-		sldVol.valueProperty().addListener((new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) {
-            	prgVol.setProgress(new_val.doubleValue()/100);
-            	try {
-            		mp.setVolume((double)new_val/100.0);
-	            } catch (NullPointerException e1) {
-		            System.out.println("NPE relating to volume slider (MediaPlayer)");
-		        }
-            }
-        }));
+	    //VOLUME
+
+		//FREQUENCY
 		sldFreq = sldMaker.createFSlider();
 		prgFreq = new ProgressBar(0);
 		prgFreq.setMinWidth(sliderWidth);
@@ -272,6 +274,36 @@ public class Soundboard extends Application {
 		grpFreq.getChildren().add(prgFreq);
 		StackPane spFreq = new StackPane();
 		spFreq.getChildren().addAll(grpFreq, sldFreq);
+		//FREQUENCY
+		
+		//RATE
+		sldRate = sldMaker.createRSlider();
+		prgRate = new ProgressBar(0);
+		prgRate.setMinWidth(sliderWidth);
+		prgRate.setMaxWidth(sliderWidth);
+		prgRate.getTransforms().addAll(new Rotate(-90, 0, 0));
+		prgRate.setPadding(new Insets(0, 7, 60, 7));
+		prgRate.setStyle("-fx-accent:blue");
+		Group grpRate = new Group();
+		grpRate.getChildren().add(prgRate);
+		StackPane spRate = new StackPane();
+		spRate.getChildren().addAll(grpRate, sldRate);
+		//
+		
+		//Disable sliders before file is loaded
+		sldRate.setDisable(true);
+		prgRate.setDisable(true);
+		
+		sldVol.setDisable(true);
+		prgVol.setDisable(true);
+		
+		sldFreq.setDisable(true);
+		prgFreq.setDisable(true);
+		
+		/**
+		 * The observers for the sliders follows:
+		 */
+		//FREQUENCY
 		sldFreq.valueProperty().addListener((new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
@@ -279,21 +311,53 @@ public class Soundboard extends Application {
             }
         }));
 		
-		//Disable sliders before file is loaded
-		sldVol.setDisable(true);
-		prgVol.setDisable(true);
-		sldFreq.setDisable(true);
-		prgFreq.setDisable(true);
+		//VOLUME
+		sldVol.valueProperty().addListener((new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+            	
+            	prgVol.setProgress(new_val.doubleValue()/100);
+            	try {
+            		mp.setVolume((double)new_val/100.0);
+	            } catch (NullPointerException e1) {
+		            System.out.println("NPE relating to volume slider (MediaPlayer)");
+		        }
+            	
+            }
+        }));
+		
+		//RATE
+		sldRate.valueProperty().addListener((new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+            	
+            	prgRate.setProgress(new_val.doubleValue()/100);
+            	try {
+            		mp.setRate((double)new_val);
+            		lblRate.textProperty().setValue(String.valueOf(sldRate.getValue()));
+            		System.out.println(sldRate.getValue());
+	            } catch (NullPointerException e1) {
+		            System.out.println("NPE relating to rate slider (MediaPlayer)");
+		        }
+            	
+            }
+        }));
 		
 		//Create labels
 		lblVol = lblMaker.createVLabel();
-		lblVol.textProperty().bind(Bindings.format("%.0f", sldVol.valueProperty()));	
 		lblVol.setPadding(new Insets(0, 30, 0, 0));
+		lblVol.textProperty().bind(Bindings.format("%.0f", sldVol.valueProperty()));
 		lblVol.setStyle(strLblColorCSS);
 		
 		lblFreq = lblMaker.createFLabel();
 		lblFreq.textProperty().bind(Bindings.format("%.0f", sldFreq.valueProperty()));
 		lblFreq.setStyle(strLblColorCSS);
+		
+		lblRate = lblMaker.createRLabel();
+		DoubleProperty d = sldRate.valueProperty();
+		String s = String.valueOf(d.doubleValue());
+		lblRate.textProperty().setValue(s);	
+		lblRate.setStyle(strLblColorCSS);
 
 		//Create containers for holding sliders and labels		
 		double vbWidth = 65;
@@ -312,9 +376,16 @@ public class Soundboard extends Application {
 		fSliderVB.setMinWidth(vbWidth);
 		fSliderVB.setMaxWidth(vbWidth);
 		
+		VBox rSliderVB = new VBox();
+		rSliderVB.getChildren().addAll(spRate, lblRate);
+		rSliderVB.setSpacing(10);
+		rSliderVB.setAlignment(Pos.CENTER);
+		rSliderVB.setMinWidth(vbWidth);
+		rSliderVB.setMaxWidth(vbWidth);
+		
 		//Create HBox for holding slider containers
 		HBox sliderHB = new HBox();
-		sliderHB.getChildren().addAll(vSliderVB, fSliderVB);
+		sliderHB.getChildren().addAll(vSliderVB, fSliderVB, rSliderVB);
 		sliderHB.setPadding(new Insets(10, 50, 50, 50));
 		sliderHB.setSpacing(40);
 		sliderHB.setAlignment(Pos.CENTER);
