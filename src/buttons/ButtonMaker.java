@@ -1,4 +1,4 @@
-package buttons;
+package src.buttons;
 import javafx.scene.control.Button;
 
 public class ButtonMaker {
