@@ -1,8 +1,9 @@
+package src;
 
 import java.io.File;
 import java.util.Optional;
 
-import buttons.ButtonMaker;
+import src.buttons.ButtonMaker;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -38,9 +39,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import labels.LabelMaker;
-import menu_items.MenuItemsMaker;
-import sliders.SliderMaker;
+import src.labels.LabelMaker;
+import src.menu_items.MenuItemsMaker;
+import src.sliders.SliderMaker;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
