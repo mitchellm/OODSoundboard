@@ -1,4 +1,4 @@
-package labels;
+package src.labels;
 
 import javafx.scene.control.Label;
 public class VolumeLabel implements L {
