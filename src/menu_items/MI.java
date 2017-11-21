@@ -1,4 +1,4 @@
-package src.menu_items;
+package menu_items;
 
 import javafx.scene.control.MenuItem;
 

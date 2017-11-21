@@ -1,4 +1,4 @@
-package src.sliders;
+package sliders;
 
 import javafx.scene.control.Slider;
 public class SliderMaker {

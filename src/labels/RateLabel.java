@@ -1,4 +1,4 @@
-package src.labels;
+package labels;
 
 import javafx.scene.control.Label;
 public class RateLabel implements L {

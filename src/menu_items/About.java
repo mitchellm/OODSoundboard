@@ -1,4 +1,4 @@
-package src.menu_items;
+package menu_items;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
