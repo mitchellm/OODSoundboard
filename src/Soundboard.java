@@ -43,6 +43,9 @@ import sliders.SliderMaker;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
+import themes.Factory;
+import themes.Theme;
+import themes.ThemeOne;
 
 public class Soundboard extends Application {
 
@@ -52,6 +55,7 @@ public class Soundboard extends Application {
 	Slider sldVol, sldFreq, sldRate;
 	Label lblVol, lblFreq, lblRate;
 	ProgressBar prgVol, prgFreq, prgRate;
+	Factory factory = new Factory();
 	
 	Button btnPlay, btnStop, btnPause;
 	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs;
@@ -447,7 +451,9 @@ public class Soundboard extends Application {
 	}
 	
 	private void theme1Click() {
-		primaryScene.setFill(Paint.valueOf("red"));
+		
+		Theme theme1 = factory.getTheme("Red");
+		theme1.changeTheme(primaryScene);
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(true);
     	cmiTheme2.selectedProperty().set(false);
@@ -455,7 +461,8 @@ public class Soundboard extends Application {
 	}
 	
 	private void theme2Click() {
-		primaryScene.setFill(Paint.valueOf("blue"));
+		Theme theme2 = factory.getTheme("Green");
+		theme2.changeTheme(primaryScene);
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(false);
     	cmiTheme2.selectedProperty().set(true);
@@ -463,7 +470,8 @@ public class Soundboard extends Application {
 	}
 	
 	private void theme3Click() {
-		primaryScene.setFill(Paint.valueOf("green"));
+		Theme theme3 = factory.getTheme("Blue");
+		theme3.changeTheme(primaryScene);
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(false);
     	cmiTheme2.selectedProperty().set(false);
