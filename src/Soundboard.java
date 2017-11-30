@@ -425,7 +425,7 @@ public class Soundboard extends Application {
 	}
 	
 	private void aboutInfo() {
-		JOptionPane.showMessageDialog(null, "Develepors:\nJared Dean\nBrett Davis\nCorey Mccoy\nMitchell Murphy\nDavid Menear\nShane Kruse");
+		JOptionPane.showMessageDialog(null, "Developers:\nJared Dean\nBrett Davis\nCorey Mccoy\nMitchell Murphy\nDavid Menear\nShane Kruse");
 	}
 	
 	private Media openClick(MyAudioPlayer mp, Stage s) {
