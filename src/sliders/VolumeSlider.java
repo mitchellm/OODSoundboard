@@ -9,8 +9,6 @@ public class VolumeSlider implements S {
 		slider.setOrientation(Orientation.VERTICAL);
 		slider.setMinHeight(450);
 		slider.setMaxHeight(450);
-		slider.setShowTickMarks(true);
-		slider.setShowTickLabels(true);
 		return slider;
 	}
 	

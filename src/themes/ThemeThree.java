@@ -1,5 +1,7 @@
 package themes;
+
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class ThemeThree implements Theme
@@ -9,7 +11,7 @@ public class ThemeThree implements Theme
 	@Override
 	public void changeTheme(Scene scene) 
 	{
-		scene.setFill(Paint.valueOf("blue"));
+		scene.setFill(Color.web("#FBE8A6"));
 		
 	}
 	

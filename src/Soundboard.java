@@ -19,7 +19,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -45,20 +44,19 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import themes.Factory;
 import themes.Theme;
-import themes.ThemeOne;
 
 public class Soundboard extends Application {
 
 	private File fileSelected;
-	private MediaPlayer mp;
+	private MyAudioPlayer mp;
 	
-	Slider sldVol, sldFreq, sldRate;
-	Label lblVol, lblFreq, lblRate;
-	ProgressBar prgVol, prgFreq, prgRate;
+	Slider sldVol, sldRate, sldBal;
+	Label lblVol, lblRate, lblBal;
+	public ProgressBar prgVol, prgRate, prgBal;
 	Factory factory = new Factory();
 	
-	Button btnPlay, btnStop, btnPause;
-	MenuItem mniAbout, mniExit, mniOpen, mniSave, mniSaveAs;
+	public Button btnPlay, btnStop, btnPause;
+	MenuItem mniAbout, mniExit, mniOpen;
 	CheckMenuItem cmiThemeDef, cmiTheme1, cmiTheme2, cmiTheme3;
 	boolean isMuted = false;
 	ToggleButton btnMute;
@@ -84,15 +82,12 @@ public class Soundboard extends Application {
 		MenuBar navBar = new MenuBar();
         Menu navFile = new Menu("File");
         Menu navEdit = new Menu("Edit");
-        Menu navOptions = new Menu("Options");
         Menu navHelp = new Menu("Help");
         Menu navThemes = new Menu("Themes");
         
         //MenuItem what appears in drop down when clicking Nav
         mniAbout = miMaker.createAbout();
         mniOpen = miMaker.createOpen();
-        mniSave = miMaker.createSave();
-        mniSaveAs = miMaker.createSaveAs();
         mniExit = miMaker.createExit();
         cmiThemeDef = new CheckMenuItem("Default");
         cmiThemeDef.selectedProperty().set(true);
@@ -109,7 +104,7 @@ public class Soundboard extends Application {
         mniOpen.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	try {
-            		mp = new MediaPlayer(openClick(mp, primaryStage));
+            		mp = new MyAudioPlayer(openClick(mp, primaryStage));
 	            	btnPlay.setDisable(false);
 	        		btnPause.setDisable(false);
 	        		btnStop.setDisable(false);
@@ -117,25 +112,15 @@ public class Soundboard extends Application {
 	        		
 	        		sldVol.setDisable(false);
 	        		prgVol.setDisable(false);
-
-	        		prgFreq.setDisable(false);
-	        		sldFreq.setDisable(false);
 	        		
 	        		prgRate.setDisable(false);
 	        		sldRate.setDisable(false);
+	        		
+	        		sldBal.setDisable(false);
+	        		prgBal.setDisable(false);
             	} catch(NullPointerException e) {
             		System.out.println("No file selected.");
             	}
-            }
-        });
-        mniSave.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-            	saveClick();
-            }
-        });
-        mniSaveAs.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-            	saveAsClick();
             }
         });
         mniExit.setOnAction(new EventHandler<ActionEvent>() {
@@ -150,7 +135,7 @@ public class Soundboard extends Application {
         });
         cmiTheme1.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	theme1Click();
+            	theme1Click(); 
             }
         });
         cmiTheme2.setOnAction(new EventHandler<ActionEvent>() {
@@ -165,22 +150,25 @@ public class Soundboard extends Application {
         });
         //adds the drop down option to the help tab(navHelp)
         navHelp.getItems().addAll(mniAbout);
-        navFile.getItems().addAll(mniOpen, mniSave, mniSaveAs, mniExit);
+        navFile.getItems().addAll(mniOpen, mniExit);
         navEdit.getItems().addAll(navThemes);
         navThemes.getItems().addAll(cmiThemeDef, cmiTheme1, cmiTheme2, cmiTheme3);
-        navOptions.getItems().addAll();
         
         //add nav tabs to navbar
-        navBar.getMenus().addAll(navFile, navEdit, navOptions, navHelp);
+        navBar.getMenus().addAll(navFile, navEdit, navHelp);
         /* ---END NAVBAR--- */
 
         /* ---START BUTTONS--- */
         btnPlay = btnMaker.createPlayButton();
+        btnPlay.setStyle("-fx-font: 22 arial; -fx-base: #D9B08C;");
         btnPause = btnMaker.createPauseButton();
+        btnPause.setStyle("-fx-font: 22 arial; -fx-base: #D9B08C;");
 		btnStop = btnMaker.createStopButton();
+		btnStop.setStyle("-fx-font: 22 arial; -fx-base: #D9B08C;");
+		
 		btnMute = new ToggleButton();
-		Image muteImage = new Image(getClass().getResourceAsStream("mute.png"));
-		btnMute.setGraphic(new ImageView(muteImage));
+		btnMute.setText("Mute");
+		btnMute.setStyle("-fx-font: 22 arial; -fx-base: #D9B08C;");
 		
 		//Disable buttons before file is loaded
 		btnPlay.setDisable(true);
@@ -258,39 +246,43 @@ public class Soundboard extends Application {
 		prgVol.setMaxWidth(sliderWidth);
 		prgVol.getTransforms().addAll(new Rotate(-90, 0, 0));
 		prgVol.setStyle("-fx-accent:blue");
-		prgVol.setPadding(new Insets(0, 7, 30, 7));
+		prgVol.setPadding(new Insets(0, 7, 0, 7));
 		Group grpVol = new Group();
 		grpVol.getChildren().add(prgVol);
 		StackPane spVol = new StackPane();
 		spVol.getChildren().addAll(grpVol, sldVol);
 	    //VOLUME
-
-		//FREQUENCY
-		sldFreq = sldMaker.createFSlider();
-		prgFreq = new ProgressBar(0);
-		prgFreq.setMinWidth(sliderWidth);
-		prgFreq.setMaxWidth(sliderWidth);
-		prgFreq.getTransforms().addAll(new Rotate(-90, 0, 0));
-		prgFreq.setPadding(new Insets(0, 7, 0, 7));
-		prgFreq.setStyle("-fx-accent:blue");
-		Group grpFreq = new Group();
-		grpFreq.getChildren().add(prgFreq);
-		StackPane spFreq = new StackPane();
-		spFreq.getChildren().addAll(grpFreq, sldFreq);
-		//FREQUENCY
 		
 		//RATE
+		double rateInitial = 1;
 		sldRate = sldMaker.createRSlider();
-		prgRate = new ProgressBar(0);
+		sldRate.setValue(rateInitial);
+		prgRate = new ProgressBar(rateInitial/sldRate.getMax());
 		prgRate.setMinWidth(sliderWidth);
 		prgRate.setMaxWidth(sliderWidth);
 		prgRate.getTransforms().addAll(new Rotate(-90, 0, 0));
-		prgRate.setPadding(new Insets(0, 7, 60, 7));
+		prgRate.setPadding(new Insets(0, 7, 0, 7));
 		prgRate.setStyle("-fx-accent:blue");
 		Group grpRate = new Group();
 		grpRate.getChildren().add(prgRate);
 		StackPane spRate = new StackPane();
 		spRate.getChildren().addAll(grpRate, sldRate);
+		//	
+		
+		//BALANCE
+		double balInitial = 0;
+		sldBal = sldMaker.createBSlider();
+		sldBal.setValue(balInitial);
+		prgBal = new ProgressBar(balInitial/sldBal.getMax());
+		prgBal.setMinWidth(sliderWidth);
+		prgBal.setMaxWidth(sliderWidth);
+		prgBal.getTransforms().addAll(new Rotate(-90, 0, 0));
+		prgBal.setStyle("-fx-accent:blue");
+		prgBal.setPadding(new Insets(0, 7, 0, 7));
+		Group grpBal = new Group();
+		grpBal.getChildren().add(prgBal);
+		StackPane spBal = new StackPane();
+		spBal.getChildren().addAll(grpBal, sldBal);
 		//
 		
 		//Disable sliders before file is loaded
@@ -300,28 +292,22 @@ public class Soundboard extends Application {
 		sldVol.setDisable(true);
 		prgVol.setDisable(true);
 		
-		sldFreq.setDisable(true);
-		prgFreq.setDisable(true);
+		sldBal.setDisable(true);
+		prgBal.setDisable(true);
 		
 		/**
 		 * The observers for the sliders follows:
 		 */
-		//FREQUENCY
-		sldFreq.valueProperty().addListener((new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                Number old_val, Number new_val) {
-            	prgFreq.setProgress(new_val.doubleValue()/19980);
-            }
-        }));
 		
 		//VOLUME
+		
 		sldVol.valueProperty().addListener((new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
             	
             	prgVol.setProgress(new_val.doubleValue()/100);
             	try {
-            		mp.setVolume((double)new_val/100.0);
+            		mp.setVolume(((double)new_val/100.0));
 	            } catch (NullPointerException e1) {
 		            System.out.println("NPE relating to volume slider (MediaPlayer)");
 		        }
@@ -330,15 +316,15 @@ public class Soundboard extends Application {
         }));
 		
 		//RATE
+		
 		sldRate.valueProperty().addListener((new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
             	
-            	prgRate.setProgress(new_val.doubleValue()/100);
+            	prgRate.setProgress(new_val.doubleValue()/4);
             	try {
-            		mp.setRate((double)new_val);
+            		mp.setRate(((double)new_val/4));
             		lblRate.textProperty().setValue(String.valueOf(sldRate.getValue()));
-            		System.out.println(sldRate.getValue());
 	            } catch (NullPointerException e1) {
 		            System.out.println("NPE relating to rate slider (MediaPlayer)");
 		        }
@@ -346,22 +332,51 @@ public class Soundboard extends Application {
             }
         }));
 		
+		//prgRate.progressProperty().bind(sldRate.valueProperty().divide(100));
+		
+		//
+		
+		//BALANCE
+		
+		
+		sldBal.valueProperty().addListener((new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                Number old_val, Number new_val) {
+            	
+            	prgBal.setProgress(new_val.doubleValue()/1);
+            	try {
+            		mp.setBalance(((double)new_val/1));
+            		lblBal.textProperty().setValue(String.valueOf(sldBal.getValue()));
+	            } catch (NullPointerException e1) {
+		            System.out.println("NPE relating to rate slider (MediaPlayer)");
+		        }
+            	
+            }
+        }));
+		//
+		
 		//Create labels
+		
+		//VOLUME
 		lblVol = lblMaker.createVLabel();
-		lblVol.setPadding(new Insets(0, 30, 0, 0));
 		lblVol.textProperty().bind(Bindings.format("%.0f", sldVol.valueProperty()));
 		lblVol.setStyle(strLblColorCSS);
+		//
 		
-		lblFreq = lblMaker.createFLabel();
-		lblFreq.textProperty().bind(Bindings.format("%.0f", sldFreq.valueProperty()));
-		lblFreq.setStyle(strLblColorCSS);
-		
+		//RATE
 		lblRate = lblMaker.createRLabel();
 		DoubleProperty d = sldRate.valueProperty();
 		String s = String.valueOf(d.doubleValue());
 		lblRate.textProperty().setValue(s);	
 		lblRate.setStyle(strLblColorCSS);
-
+		//
+		
+		//BALACNE
+		lblBal = lblMaker.createBLabel();
+		lblBal.textProperty().bind(Bindings.format("%.0f", sldBal.valueProperty()));
+		lblBal.setStyle(strLblColorCSS);
+		//
+		
 		//Create containers for holding sliders and labels		
 		double vbWidth = 65;
 		
@@ -372,13 +387,6 @@ public class Soundboard extends Application {
 		vSliderVB.setMinWidth(vbWidth);
 		vSliderVB.setMaxWidth(vbWidth);
 		
-		VBox fSliderVB = new VBox();
-		fSliderVB.getChildren().addAll(spFreq, lblFreq);
-		fSliderVB.setSpacing(10);
-		fSliderVB.setAlignment(Pos.CENTER);
-		fSliderVB.setMinWidth(vbWidth);
-		fSliderVB.setMaxWidth(vbWidth);
-		
 		VBox rSliderVB = new VBox();
 		rSliderVB.getChildren().addAll(spRate, lblRate);
 		rSliderVB.setSpacing(10);
@@ -386,13 +394,23 @@ public class Soundboard extends Application {
 		rSliderVB.setMinWidth(vbWidth);
 		rSliderVB.setMaxWidth(vbWidth);
 		
+		VBox bSliderVB = new VBox();
+		bSliderVB.getChildren().addAll(spBal, lblBal);
+		bSliderVB.setSpacing(10);
+		bSliderVB.setAlignment(Pos.CENTER);
+		bSliderVB.setMinWidth(vbWidth);
+		bSliderVB.setMaxWidth(vbWidth);
+		
 		//Create HBox for holding slider containers
 		HBox sliderHB = new HBox();
-		sliderHB.getChildren().addAll(vSliderVB, fSliderVB, rSliderVB);
+		sliderHB.getChildren().addAll(vSliderVB, rSliderVB, bSliderVB);
 		sliderHB.setPadding(new Insets(10, 50, 50, 50));
 		sliderHB.setSpacing(40);
 		sliderHB.setAlignment(Pos.CENTER);
 		/* ---END SLIDERS--- */
+		
+		
+		
 		
 		//Create primary borderpane for layout and add sections
 		BorderPane root = new BorderPane();
@@ -416,21 +434,13 @@ public class Soundboard extends Application {
 		
 	}
 	
-	private Media openClick(MediaPlayer mp, Stage s) {
+	private Media openClick(MyAudioPlayer mp, Stage s) {
 		FileChooser fileChooser = new FileChooser();
 		ExtensionFilter fileFilter = new ExtensionFilter("Audio Files", "*.mp3", "*.m4a", "*.wav");
 		fileChooser.getExtensionFilters().add(fileFilter);
         fileSelected = fileChooser.showOpenDialog(s);
         Media sound = new Media(new File(fileSelected.getAbsolutePath()).toURI().toString());
         return sound;
-	}
-	
-	private void saveClick() {
-		
-	}
-	
-	private void saveAsClick() {
-		
 	}
 	
 	private void exitClick() {
@@ -441,6 +451,8 @@ public class Soundboard extends Application {
 		if(result.get() == ButtonType.OK) System.exit(0);
 		
 	}
+	
+	// TEND TO THIS //
 	
 	private void themeDefClick() {
 		primaryScene.setFill(Paint.valueOf("#2c2f33"));
@@ -453,6 +465,13 @@ public class Soundboard extends Application {
 	private void theme1Click() {
 		
 		Theme theme1 = factory.getTheme("Red");
+		btnPlay.setStyle("-fx-font: 22 arial; -fx-base: #F3E0DC;");
+		btnStop.setStyle("-fx-font: 22 arial; -fx-base: #F3E0DC;");
+		btnPause.setStyle("-fx-font: 22 arial; -fx-base: #F3E0DC;");
+		btnMute.setStyle("-fx-font: 22 arial; -fx-base: #F3E0DC;");
+		prgVol.setStyle("-fx-accent: #4285F4");
+		prgRate.setStyle("-fx-accent: #4285F4");
+		prgBal.setStyle("-fx-accent: #4285F4");
 		theme1.changeTheme(primaryScene);
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(true);
@@ -462,6 +481,13 @@ public class Soundboard extends Application {
 	
 	private void theme2Click() {
 		Theme theme2 = factory.getTheme("Green");
+		btnPlay.setStyle("-fx-font: 22 arial; -fx-base: #C5C6C7;");
+		btnStop.setStyle("-fx-font: 22 arial; -fx-base: #C5C6C7;");
+		btnPause.setStyle("-fx-font: 22 arial; -fx-base: #C5C6C7;");
+		btnMute.setStyle("-fx-font: 22 arial; -fx-base: #C5C6C7;");
+		prgVol.setStyle("-fx-accent: #B1A296");
+		prgRate.setStyle("-fx-accent: #B1A296");
+		prgBal.setStyle("-fx-accent: #B1A296");
 		theme2.changeTheme(primaryScene);
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(false);
@@ -471,11 +497,22 @@ public class Soundboard extends Application {
 	
 	private void theme3Click() {
 		Theme theme3 = factory.getTheme("Blue");
+		btnPlay.setStyle("-fx-font: 22 arial; -fx-base: #F4976C;");
+		btnStop.setStyle("-fx-font: 22 arial; -fx-base: #F4976C;");
+		btnPause.setStyle("-fx-font: 22 arial; -fx-base: #F4976C;");
+		btnMute.setStyle("-fx-font: 22 arial; -fx-base: #F4976C;");
+		prgVol.setStyle("-fx-accent: #3036C6");
+		prgRate.setStyle("-fx-accent: #3036C6");
+		prgBal.setStyle("-fx-accent: #3036C6");
+		lblVol.setStyle("-fx-accent:black");
+		lblRate.setStyle("-fx-accent:black");
+		lblBal.setStyle("-fx-accent:black");
 		theme3.changeTheme(primaryScene);
 		cmiThemeDef.selectedProperty().set(false);
     	cmiTheme1.selectedProperty().set(false);
     	cmiTheme2.selectedProperty().set(false);
     	cmiTheme3.selectedProperty().set(true);
 	}
+	
 	
 }
