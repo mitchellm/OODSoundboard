@@ -1,6 +1,8 @@
 import java.io.File;
 import java.util.Optional;
 
+import javax.swing.JOptionPane;
+
 import buttons.ButtonMaker;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -423,7 +425,7 @@ public class Soundboard extends Application {
 	}
 	
 	private void aboutInfo() {
-		
+		JOptionPane.showMessageDialog(null, "Develepors:\nJared Dean\nBrett Davis\nCorey Mccoy\nMitchell Murphy\nDavid Menear\nShane Kruse");
 	}
 	
 	private Media openClick(MyAudioPlayer mp, Stage s) {
