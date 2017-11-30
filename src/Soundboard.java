@@ -257,7 +257,7 @@ public class Soundboard extends Application {
 		double rateInitial = 1;
 		sldRate = sldMaker.createRSlider();
 		sldRate.setValue(rateInitial);
-		prgRate = new ProgressBar(rateInitial/sldRate.getMax());
+		prgRate = new ProgressBar((rateInitial-0.5)/1.5);
 		prgRate.setMinWidth(sliderWidth);
 		prgRate.setMaxWidth(sliderWidth);
 		prgRate.getTransforms().addAll(new Rotate(-90, 0, 0));
@@ -270,10 +270,9 @@ public class Soundboard extends Application {
 		//	
 		
 		//BALANCE
-		double balInitial = 0;
 		sldBal = sldMaker.createBSlider();
-		sldBal.setValue(balInitial);
-		prgBal = new ProgressBar(balInitial/sldBal.getMax());
+		sldBal.setValue(0);
+		prgBal = new ProgressBar(0.5);
 		prgBal.setMinWidth(sliderWidth);
 		prgBal.setMaxWidth(sliderWidth);
 		prgBal.getTransforms().addAll(new Rotate(-90, 0, 0));
@@ -283,7 +282,6 @@ public class Soundboard extends Application {
 		grpBal.getChildren().add(prgBal);
 		StackPane spBal = new StackPane();
 		spBal.getChildren().addAll(grpBal, sldBal);
-		//
 		
 		//Disable sliders before file is loaded
 		sldRate.setDisable(true);
@@ -320,11 +318,9 @@ public class Soundboard extends Application {
 		sldRate.valueProperty().addListener((new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
-            	
-            	prgRate.setProgress(new_val.doubleValue()/4);
+            	prgRate.setProgress((new_val.doubleValue()-0.5)/1.5);
             	try {
-            		mp.setRate(((double)new_val/4));
-            		lblRate.textProperty().setValue(String.valueOf(sldRate.getValue()));
+            		mp.setRate(((double)new_val));
 	            } catch (NullPointerException e1) {
 		            System.out.println("NPE relating to rate slider (MediaPlayer)");
 		        }
@@ -342,11 +338,9 @@ public class Soundboard extends Application {
 		sldBal.valueProperty().addListener((new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                 Number old_val, Number new_val) {
-            	
-            	prgBal.setProgress(new_val.doubleValue()/1);
+            	prgBal.setProgress((new_val.doubleValue()+1)/2);
             	try {
-            		mp.setBalance(((double)new_val/1));
-            		lblBal.textProperty().setValue(String.valueOf(sldBal.getValue()));
+            		mp.setBalance(new_val.doubleValue());
 	            } catch (NullPointerException e1) {
 		            System.out.println("NPE relating to rate slider (MediaPlayer)");
 		        }
@@ -365,15 +359,13 @@ public class Soundboard extends Application {
 		
 		//RATE
 		lblRate = lblMaker.createRLabel();
-		DoubleProperty d = sldRate.valueProperty();
-		String s = String.valueOf(d.doubleValue());
-		lblRate.textProperty().setValue(s);	
+		lblRate.textProperty().bind(Bindings.format("%.1f", sldRate.valueProperty()));
 		lblRate.setStyle(strLblColorCSS);
 		//
 		
 		//BALACNE
 		lblBal = lblMaker.createBLabel();
-		lblBal.textProperty().bind(Bindings.format("%.0f", sldBal.valueProperty()));
+		lblBal.textProperty().bind(Bindings.format("%.1f", sldBal.valueProperty()));
 		lblBal.setStyle(strLblColorCSS);
 		//
 		
